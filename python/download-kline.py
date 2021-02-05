@@ -5,9 +5,6 @@
   set the absoluate path destination folder for STORE_DIRECTORY, and run
 
   e.g. STORE_DIRECTORY=/data/ ./download-kline.py
-
-  original: https://github.com/binance/binance-public-data/blob/master/python/download-kline.py
-  modified by: Hugo Azevedo
 """
 
 import os
@@ -145,7 +142,7 @@ if __name__ == "__main__":
       print(colored("[{}/{}] - start download {} klines ".format(current+1, len(symbols), symbol), 'blue'))
       for interval in INTERVALS:
         for year in YEARS:
-          for month in list(range(1, 12)):
+          for month in list(range(1, 13)):
             path = "data/spot/klines/{}/{}/".format(symbol.upper(), interval)
             file_name = "{}-{}-{}-{}.zip".format(symbol.upper(), interval, year, '{:02d}'.format(month))
             download_file(path, file_name)
