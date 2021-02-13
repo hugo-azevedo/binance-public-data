@@ -1,0 +1,8 @@
+beautifulsoup4
+colorama
+matplotlib
+numpy
+pandas
+pandas-datareader
+scikit-learn
+termcolor

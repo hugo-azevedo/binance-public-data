@@ -7,20 +7,23 @@
   e.g. STORE_DIRECTORY=/data/ ./download-kline.py
 """
 
-import os
-import json
-from pathlib import Path
-import urllib.request
 from colorama import init
+import json
+import os
+from pathlib import Path
+import sys, getopt
 from termcolor import colored
+import urllib.request
 
 # use Colorama to make Termcolor work on Windows too
 init()
 
-YEARS = ['2017', '2018', '2019', '2020']
+YEARS = ['2017', '2018', '2019', '2020', '2021']
 INTERVALS = ["1m", "5m", "15m", "30m", "1h", "2h", "4h", "6h", "8h", "12h", "1d", "3d", "1w", "1mo"]
 
 BASE_URL = 'https://data.binance.vision/'
+
+REVERSE_TICKER_ORDER = False
 
 def get_destination_dir(file_url):
   store_directory = os.environ.get('STORE_DIRECTORY')
@@ -108,8 +111,18 @@ def select_intervals_subset():
         print(colored(">> Error: {} is not a valid interval. Try again. ".format(interval), 'red'))
   return selected_intervals
 
+def main(argv):
+  opts, args = getopt.getopt(argv,"r")
+  for opt, arg in opts:
+    if opt in ("-r"):
+      print('Using reversed order')
+      global REVERSE_TICKER_ORDER
+      REVERSE_TICKER_ORDER = True
 
 if __name__ == "__main__":
+    main(sys.argv[1:])
+    print(REVERSE_TICKER_ORDER)
+    
     print(colored("Fetching all symbols from exchange...", 'blue'))
     symbols = get_all_symbols()
     all = len(symbols)
@@ -138,7 +151,7 @@ if __name__ == "__main__":
       if select_intervals == '':
         print('Y')
 
-    for symbol in symbols:
+    for symbol in (reversed(symbols) if REVERSE_TICKER_ORDER else symbols):
       print(colored("[{}/{}] - start download {} klines ".format(current+1, len(symbols), symbol), 'blue'))
       for interval in INTERVALS:
         for year in YEARS:
