@@ -3,8 +3,6 @@ import json
 import os
 from pathlib import Path
 import zipfile
-import shutil
-import gzip
 import pandas as pd
 import io
 
